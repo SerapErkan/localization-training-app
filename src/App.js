@@ -1,6 +1,6 @@
 import "./App.css";
-import { IntlProvider, FormattedMessage, FormattedNumber } from "react-intl";
-import { useState } from "react";
+import { IntlProvider, FormattedMessage } from "react-intl";
+import { useState, useEffect } from "react";
 
 const messages = {
   "tr-TR": {
@@ -11,25 +11,43 @@ const messages = {
   },
 };
 function App() {
-  const [lang, setLang] = useState("tr-TR");
+  const isLocale = localStorage.getItem("locale");
+  const defaultLocale = isLocale ? isLocale : navigator.language;
 
+
+  const [locale, setlocale] = useState(defaultLocale);
+
+  useEffect(() => {
+    localStorage.setItem("locale", locale);
+  }, [locale]);
 
   return (
     <div className="App">
       <br />
-      <IntlProvider messages={messages[lang]}>
+      <IntlProvider messages={messages[locale]}>
         <h1>
           <FormattedMessage id="title" />
         </h1>
 
-        <br />
-        <br />
-
-        <button onClick={() => setLang("tr-TR")}>TR</button>
-        <button onClick={() => setLang("en-US")}>EN</button>
+        <button onClick={() => setlocale("tr-TR")}>TR</button>
+        <button onClick={() => setlocale("en-US")}>EN</button>
       </IntlProvider>
     </div>
   );
 }
 
 export default App;
+
+//NOT:
+//https://formatjs.io/docs/getting-started/installation
+//npm i -S react react-intl
+//import {IntlProvider, FormattedMessage, FormattedNumber} from 'react-intl'
+{
+  /* 
+<IntlProvider messages={} >
+
+<FormattedMessage id={}/>
+
+</IntlProvider> 
+*/
+}
